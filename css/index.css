@@ -1,3 +1,177 @@
 body{
     padding: 10px 20%;
 }
+
+/* =========================================================
+           1. ANPASSBARE CSS-VARIABLEN (Hier Farben & Abstände ändern)
+       ========================================================= */
+    :root {
+        /* Farben */
+        --bg-color: #0d0f12;       /* Hintergrund der Seite */
+        --card-bg: #161920;        /* Hintergrund der Karten */
+        --card-border: #252a36;    /* Rahmen der Karten */
+        --accent-color: #34d399;   /* Neon-Grün / Akzentfarbe */
+        --text-main: #ffffff;      /* Haupttext / Überschriften */
+        --text-muted: #9ca3af;     /* Nebentext / Beschreibungen */
+
+        /* Abstände & Radien */
+        --gap: 20px;               /* Abstand zwischen den Karten */
+        --card-radius: 16px;       /* Abrundung der Karten */
+        --card-padding: 32px;      /* Innenabstand der Karten */
+        --btn-size: 48px;          /* Größe der Pfeil-Buttons */
+
+        /* Standardwert für Mobilgeräte */
+        --visible-cards: 1;
+    }
+
+    /* Tablet Breakpoint (ab 640px): 2 Cards gleichzeitig */
+    @media (min-width: 640px) {
+        :root {
+            --visible-cards: 2;
+        }
+    }
+
+    /* Desktop Breakpoint (ab 1024px): 3 Cards gleichzeitig */
+    @media (min-width: 1024px) {
+        :root {
+            --visible-cards: 3;
+        }
+    }
+
+        /* =========================================================
+           2. BASIC RESET & LAYOUT
+           ========================================================= */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+       /* body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        } */
+
+        /* Haupt-Container */
+        .carousel-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Der Scroll-Bereich */
+        .carousel-track {
+            display: flex;
+            gap: var(--gap);
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            padding: 8px 0;
+            
+            /* Scrollbar ausblenden */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+        }
+
+        .carousel-track::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
+        }
+
+        /* =========================================================
+           3. KARTEN-DESIGN
+           ========================================================= */
+        .carousel-card {
+            /* Exakte Berechnung der Breite basierend auf sichtbaren Karten + Gaps */
+            flex: 0 0 calc((100% - (var(--visible-cards) - 1) * var(--gap)) / var(--visible-cards));
+            scroll-snap-align: start;
+            
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--card-radius);
+            padding: var(--card-padding);
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            min-height: 240px;
+            
+            transition: border-color 0.25s ease, transform 0.25s ease;
+        }
+
+        .carousel-card:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+        .card-tag {
+            color: var(--accent-color);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .card-text {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* =========================================================
+           4. NAVIGATION BUTTONS (LINKS & RECHTS ABSOLUT)
+           ========================================================= */
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: var(--btn-size);
+            height: var(--btn-size);
+            border-radius: 50%;
+            
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            transition: all 0.2s ease;
+        }
+
+        .carousel-btn:hover {
+            background-color: var(--card-border);
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        /* Positionierung ganz links & rechts leicht herausragend */
+        .btn-prev {
+            left: calc(-1 * (var(--btn-size) / 2));
+        }
+
+        .btn-next {
+            right: calc(-1 * (var(--btn-size) / 2));
+        }
+
+        /* Auf Smartphones Pfeile leicht nach innen holen damit sie nicht über den Bildschirm rand stehen */
+        @media (max-width: 640px) {
+            .btn-prev { left: 8px; }
+            .btn-next { right: 8px; }
+        }
