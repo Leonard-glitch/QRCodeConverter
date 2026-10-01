@@ -14,16 +14,17 @@
         <div class="headerSettingsbtnDiv"><button class="button" id="headerSettingsBTN">Settings</button></div>
     </header>
     <main>
-        <section>
-            <div>
-                <div><p>Free · No sign-up · In seconds</p></div>
-                <div><h1><span>A link.</span><span>A code.</span><span>Ready to scan.</span></h1></div>
-                <div><p>Paste your link and instantly get a print-quality QR code — right in your browser, with no extra steps.</p></div>
-                <div><div><input type="text" placeholder="https://your-link.com"><button>Generate QR Code</button></div></div>
+        <section id="topSection">
+            <div class="sloganAndInputDiv">
+                <div class="levelOneTopDiv"><p class="sizeTHREEHeader">Free · No sign-up · In seconds</p></div>
+                <div class="levelTwoTopDiv"><h1 class="sizeONEHeader"><span>A link.</span><span>A code.</span><span>Ready to scan.</span></h1></div>
+                <div class="levelThreeTopDiv"><p class="sizeTWOHeader">Paste your link and instantly get a print-quality QR code — right in your browser, with no extra steps.</p></div>
+                <div class="codeInput-GenerateCodeDiv"><input type="text" placeholder="https://your-link.com" id="linkInputField"><button id="generateCodeButton">Generate QR Code</button></div>
+                <div class="historyDivMain"><div class="historyHeaderDiv"><label for="" id="latestInputsLabel">Latest inputs</label> <button id="deleteHistoryButton">Delete  history</button></div> <div id="historyContainer">Verlauf</div></div>
             </div>
-            <div><img src="./images/qr-decorativeQRCode.svg" alt="QR Code Example"></div>
+            <div class="qrCodeExampleImgDiv"><img src="./images/qr-decorativeQRCode.svg" alt="QR Code Example" id="qrCodeExampleImg"></div>
         </section>
-        <section>
+        <section id="featuresSection">
             <!-- CAROUSEL WRAPPER -->
             <div class="carousel-wrapper">
                 
