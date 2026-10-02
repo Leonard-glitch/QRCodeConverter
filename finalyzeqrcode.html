@@ -15,8 +15,8 @@
     </header>
     <main>
         <section>
-            <div><a href="./index.html">New link</a> <p></p></div>
-            <div>
+            <div><a href="./index.html" id="backtoNewLink">New link</a> <div id="currentLinkDiv"></div></div>
+            <div id="livePreviewContainerDiv">
                 QR CODE LIVE Preview
             </div>
         </section>
@@ -25,7 +25,7 @@
 
             <div class="option-group" data-category="designs">
                 <label for="" class="sizeTWOHeader">Designs</label>
-                <div></div>
+                <div id="designsContainerDiv"></div>
             </div>
 
             <div class="option-group" data-category="frame">
@@ -47,7 +47,7 @@
             <div class="option-group" data-category="symbolCenter">
                 <label for="" class="sizeTWOHeader">Symbol in the center</label>
                 <div><button class="settingsOptionButton" data-id="none"></button> <button class="settingsOptionButton" data-id="brand"></button> <button class="settingsOptionButton" data-id="link"></button> <button class="settingsOptionButton" data-id="star"></button> <button class="settingsOptionButton" data-id="heart"></button> <button class="settingsOptionButton" id="uploadImageButton">Upload</button></div>
-                <div></div>
+                <div id="ownSymbolinCenterDiv"></div>
             </div>
 
             <div>
@@ -64,7 +64,7 @@
 
             <div class="sizeOption-group" data-category="size">
                 <div><label for="" class="sizeTWOHeader">Size</label> <span id="pxAndUnitOutputSpan">px~cm</span></div>
-                <div></div>  
+                <div id="sizeSliderDiv"></div>  
                 <div><button class="settingsOptionButton" data-id="businessCard"></button><button class="settingsOptionButton" data-id="web"></button><button class="settingsOptionButton" data-id="poster"></button></div>
             </div>
 
