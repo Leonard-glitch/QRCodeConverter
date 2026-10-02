@@ -22,3 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
             prevBtn.addEventListener('click', () => scrollCarousel('prev'));
             nextBtn.addEventListener('click', () => scrollCarousel('next'));
         });
+
+
+const generateCodeButton = document.getElementById('generateCodeButton');
+
+generateCodeButton.addEventListener('click', () => {
+    window.location.href = "finalyzeqrcode.html";
+});
