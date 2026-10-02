@@ -2,6 +2,160 @@ body{
     padding: 10px 20%;
 }
 
+main{
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+#topSection{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+    .sloganAndInputDiv{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+        .levelOneTopDiv{
+            display: flex;
+            flex-direction: row;
+        }
+            .sizeTHREEHeader{
+                color: var(--text-color-secondary);
+                font-size: 0.5rem;
+            }
+        .levelTwoTopDiv{
+            display: flex;
+            flex-direction: row;
+        }
+            .sizeONEHeader{
+                display: flex;
+                flex-direction: column;
+
+                color: var(--text-color-primary);
+                font-size: 1.5rem;
+            }
+        .levelThreeTopDiv{
+            display: flex;
+            flex-direction: row;
+        }
+            .sizeTWOHeader{
+                color: var(--text-color-secondary);
+                font-size: 0.875rem;
+            }
+        .codeInput-GenerateCodeDiv{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            font-size: 2rem;
+            padding: 0.2rem;
+            border: 1px solid var(--border-color-primary);
+            border-radius: 10px;
+            background-color: var(--background-color-secondary);
+        }
+            #linkInputField{
+                background-color: transparent;
+                border: none;
+                color: var(--text-color-primary);
+                font-size: 1em;
+                width: 100%;
+            }
+            #generateCodeButton{
+                text-decoration: none;
+                background-color: var(--cyan-highlight);
+                border: none;
+                border-radius: 10px;
+                color: var(--text-color-reverse);
+                padding: 0.5rem;
+                font-size: 0.875rem;
+
+                flex-self: flex-end;
+            }
+        .historyDivMain{
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+            .historyHeaderDiv{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+                #latestInputsLabel{
+                    color: var(--text-color-primary);
+                    font-size: 0.7rem;
+                }
+                #deleteHistoryButton{
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+                    text-decoration: none;
+                    background-color: transparent;
+                    border: none;
+                    color: var(--text-color-secondary);
+                    font-size: 0.4rem;
+                }
+                #deleteHistoryButton:hover{
+                    cursor: pointer;
+                    color: var(--cautionColor);
+                }
+            #historyContainer{
+                display: flex;
+                flex-direction: column;
+                gap: 0.2rem;
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* =========================================================
            1. ANPASSBARE CSS-VARIABLEN (Hier Farben & Abstände ändern)
        ========================================================= */

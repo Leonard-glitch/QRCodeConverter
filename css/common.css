@@ -1,5 +1,6 @@
 html{
     font-size: 20px;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 *{
@@ -16,7 +17,100 @@ body{
     --background-color-base: #0A0E14;
     --background-color-secondary: #12161F;
     --text-color-primary: #EDEFF2;
+    --text-color-reverse: black;
     --text-color-secondary: #6B7280;
     --cyan-highlight: #00E5C7;
     --border-color-primary: #6B7280;
+    --errorColor:red;
+    --cautionColor:red;
 }
+
+.btnWantsToBeLink{
+    text-decoration: none;
+    background-color: transparent;
+    border: none;
+    color: var(--text-color-primary);
+
+    font-size: 0.875rem;
+}
+
+a{
+    text-decoration: none;
+    color: var(--text-color-primary);
+}
+
+.headerContainerMain{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0.5rem 0;
+}
+
+    .headerLogoNameDiv{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+        #headerLogoLink{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            flex-wrap: nowrap;
+            gap: 5px;
+
+            text-decoration: none;
+        }
+        #headerLogoLink:hover{
+            cursor: pointer;
+        }
+            #brandImage{
+                height: 20px;
+                width: 20px;
+                object-fit: contain;
+            }
+            #brandName{
+                color: var(--text-color-primary);
+                font-size: 1.2rem;
+                font-weight: 600;
+            }
+    
+    .headerThreeLinksDiv{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 50px;
+    }
+        #headerHowItWorksBTN{
+            color: var(--text-color-secondary);
+            font-size: 0.5rem;
+        }
+        #headerHowItWorksBTN:hover{
+            color: var(--text-color-primary);
+            cursor: pointer;
+        }
+        .headerLink{
+            color: var(--text-color-secondary);
+            font-size: 0.7rem;
+        }
+        .headerLink:hover{
+            color: var(--text-color-primary);
+            cursor: pointer;
+        }
+    .headerSettingsbtnDiv{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+        #headerSettingsBTN{
+            color: var(--text-color-secondary);
+            background: transparent;
+            border: none;
+        }
+        #headerSettingsBTN:hover{
+            color: var(--text-color-primary);
+            cursor: pointer;
+        }
