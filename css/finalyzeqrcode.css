@@ -1,0 +1,234 @@
+body{
+    padding: 10px 20%;
+}
+
+
+.sizeONEHeader{
+    color: var(--text-color-primary);
+    font-size: 1.5rem;
+}
+.sizeTWOHeader{
+    color: var(--text-color-primary);
+    font-size: 0.875rem;
+}
+.sizeTHREEHeader{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    color: var(--text-color-secondary);
+    font-size: 0.625rem;;
+}
+
+
+.option-group{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.settingsOptionButtonDiv{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+}
+    .settingsOptionButton{
+        display: flex;
+        flex-wrap: nowrap;
+        background:transparent;
+        color: var(--text-color-secondary);
+        font-size: 0.775rem;
+        padding: 0.5rem 0.7rem;
+        border: 1px solid var(--border-color-secondary);
+        border-radius: 10px;
+    }
+    .settingsOptionButton:hover{
+        cursor: pointer;
+    }
+    .settingsOptionButton.active{
+        color: var(--cyan-highlight);
+        border-color: var(--cyan-highlight);
+        background-color: var(--cyan-highlight-shimmer);
+    }
+
+
+main{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 3rem;
+}
+
+#qrCodeLivePrewSec{
+    display: flex;
+    flex-direction: column;
+
+    width: 50%;
+
+    position: sticky;
+    top: 20px;
+}
+    #backandCurrentLinkDiv{
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+        #backtoNewLink{
+            text-decoration: none;
+            color: var(--text-color-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        #currentLinkDiv{
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            color: var(--text-color-secondary);
+            font-size: 0.7rem;
+        }
+    #livePreviewContainerDiv{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+#settingsSection{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    width: 50%;
+}
+    #infoMessagesDiv{
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    #designsContainerDiv{
+        display: flex;
+        flex-direction: row;
+        gap: 0.2rem;
+    }
+
+    #textToInputField{
+        background-color: var(--background-color-secondary);
+        padding: 0.6rem;
+        border: 1px solid var(--border-color-primary);
+        border-radius: 10px;
+        color: var(--text-color-primary);
+        font-size: 1rem;
+        width: 100%;
+    }
+    #textToInputField:focus{
+        outline: none;
+        border: 3px solid var(--cyan-highlight);
+    }
+
+    #uploadImageButton{
+        text-decoration: none;
+    }
+
+    #colorMaindiv{
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+        .colorsOption-group{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            gap: 0.5rem;
+        }
+            .settingsColorOptionButtonDiv{
+                display: flex;
+                align-items: center;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                gap: 0.3rem;
+            }
+                .settingsColorOptionButton{
+                    width: 35px;
+                    height: 30px;
+                    border-radius: 10px;
+                    border: none;
+                    cursor: pointer;
+                }
+                .settingsColorOptionButton.active{
+                    border: 1px solid var(--cyan-highlight);
+                }
+
+                #codePickOwnColorDiv{
+                    width: 30px;
+                    height: 20px;
+                    border-radius: 0;
+                    border: none;
+                    cursor: pointer;
+                    background-color: var(--cyan-highlight);
+                }
+                #backPickOwnColorDiv{
+                    width: 30px;
+                    height: 20px;
+                    border-radius: 0;
+                    border: none;
+                    cursor: pointer;
+                    background-color: var(--cyan-highlight);
+                }
+    
+    .sizeOption-group{
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+        #sizeHeaderDiv{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+            #pxAndUnitOutputSpan{
+                color: var(--cyan-highlight);
+                font-size: 0.685rem;
+                font-weight: 800;
+            }
+
+        #sizeSliderDiv{
+            width: 100%;
+        }
+
+    .downloadPrint-group{
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+        #downloadPNGBtn{
+            width: 100%;
+            padding: 0.7rem 0;
+            text-decoration: none;
+            background-color: var(--cyan-highlight);
+            border: none;
+            border-radius: 10px;
+            color: var(--text-color-reverse);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+        }
+        #svgAndPrintBtnDiv{
+            display: flex;
+            flex-direction: row;
+            gap: 0.4rem;
+        }
+            .svgPrintBtns{
+                padding: 0.7rem 0;
+                text-decoration: none;
+                background-color: var(--background-color-secondary);
+                border: 1px solid var(--border-color-primary);
+                border-radius: 10px;
+                color: var(--text-color-primary);
+                font-size: 0.8rem;
+                font-weight: 600;
+                text-align: center;
+                width: 100%;
+            }

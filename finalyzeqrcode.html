@@ -17,14 +17,16 @@
         <div class="headerSettingsbtnDiv"><button class="button" id="headerSettingsBTN"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></button></div>
     </header>
     <main>
-        <section>
-            <div><a href="./index.html" id="backtoNewLink">New link</a> <div id="currentLinkDiv"></div></div>
+        <section id="qrCodeLivePrewSec">
+            <div id="backandCurrentLinkDiv"><a href="./index.html" id="backtoNewLink">New link</a> <div id="currentLinkDiv">https://gemini.google.com/app/6958509a91c85146?hl=de</div></div>
             <div id="livePreviewContainerDiv">
                 QR CODE LIVE Preview
             </div>
         </section>
-        <section>
+        <section id="settingsSection">
             <h1 class="sizeONEHeader">Your code is ready</h1>
+
+            <div id="infoMessagesDiv"></div>
 
             <div class="option-group" data-category="designs">
                 <h2 class="sizeTWOHeader">Designs</h2>
@@ -33,47 +35,47 @@
 
             <div class="option-group" data-category="frame">
                 <h2 class="sizeTWOHeader">Frame</h2>
-                <div><button class="settingsOptionButton" data-id="none"></button> <button class="settingsOptionButton" data-id="bars"></button> <button class="settingsOptionButton" data-id="bubble"></button> <button class="settingsOptionButton" data-id="corners"></button></div>
+                <div class="settingsOptionButtonDiv"><button class="settingsOptionButton active" data-id="none">None</button> <button class="settingsOptionButton" data-id="bars">Bars</button> <button class="settingsOptionButton" data-id="bubble">Bubble</button> <button class="settingsOptionButton" data-id="corners">Corners</button></div>
                 <div><input type="text" id="textToInputField" aria-label="Frame text"></div>
             </div>
 
             <div class="option-group" data-category="pattern">
                 <h2 class="sizeTWOHeader">Pattern</h2>
-                <div><button class="settingsOptionButton" data-id="squares"></button> <button class="settingsOptionButton" data-id="round"></button> <button class="settingsOptionButton" data-id="dots"></button> <button class="settingsOptionButton" data-id="lines"></button></div>
+                <div class="settingsOptionButtonDiv"><button class="settingsOptionButton" data-id="squares">Squares</button> <button class="settingsOptionButton" data-id="round">Round</button> <button class="settingsOptionButton" data-id="dots">Dots</button> <button class="settingsOptionButton" data-id="lines">Lines</button></div>
             </div>
 
             <div class="option-group" data-category="corners">
                 <h2 class="sizeTWOHeader">Corners</h2>
-                <div><button class="settingsOptionButton" data-id="sharp"></button> <button class="settingsOptionButton" data-id="rounded"></button> <button class="settingsOptionButton" data-id="circle"></button></div>
+                <div class="settingsOptionButtonDiv"><button class="settingsOptionButton" data-id="sharp">Sharp</button> <button class="settingsOptionButton" data-id="rounded">Rounded</button> <button class="settingsOptionButton" data-id="circle">Circle</button></div>
             </div>
 
             <div class="option-group" data-category="symbolCenter">
                 <h2 class="sizeTWOHeader">Symbol in the center</h2>
-                <div><button class="settingsOptionButton" data-id="none"></button> <button class="settingsOptionButton" data-id="brand"></button> <button class="settingsOptionButton" data-id="link"></button> <button class="settingsOptionButton" data-id="star"></button> <button class="settingsOptionButton" data-id="heart"></button> <button class="settingsOptionButton" id="uploadImageButton">Upload</button></div>
+                <div class="settingsOptionButtonDiv"><button class="settingsOptionButton" data-id="none">None</button> <button class="settingsOptionButton" data-id="brand">Brand</button> <button class="settingsOptionButton" data-id="link">Link</button> <button class="settingsOptionButton" data-id="star">Star</button> <button class="settingsOptionButton" data-id="heart">Heart</button> <button class="settingsOptionButton" id="uploadImageButton">Upload</button></div>
                 <div id="ownSymbolinCenterDiv"></div>
             </div>
 
-            <div>
+            <div id="colorMaindiv">
                 <h2 class="sizeTWOHeader">Colors</h2>
                 <div class="colorsOption-group" data-category="codeColors">
                     <h3 class="sizeTHREEHeader">Code</h3>
-                    <div><button class="settingsColorOptionButton" data-id="codeColorOne"></button> <button class="settingsColorOptionButton" data-id="codeColorTwo"></button> <button class="settingsColorOptionButton" data-id="codeColorThree"></button> <button class="settingsColorOptionButton" data-id="codeColorFour"></button> <button class="settingsColorOptionButton" data-id="codeColorFive"></button> <div id="codePickOwnColorDiv">Farbe wählen</div></div>
+                    <div class="settingsColorOptionButtonDiv"><button class="settingsColorOptionButton" data-id="codeColorOne"></button> <button class="settingsColorOptionButton" data-id="codeColorTwo"></button> <button class="settingsColorOptionButton" data-id="codeColorThree"></button> <button class="settingsColorOptionButton" data-id="codeColorFour"></button> <button class="settingsColorOptionButton" data-id="codeColorFive"></button> <div id="codePickOwnColorDiv"></div></div>
                 </div>
                 <div class="colorsOption-group" data-category="codeBackgroundColors">
                     <h3 class="sizeTHREEHeader">Background</h3>
-                    <div><button class="settingsColorOptionButton" data-id="backColorOne"></button> <button class="settingsColorOptionButton" data-id="backColorTwo"></button> <button class="settingsColorOptionButton" data-id="backColorThree"></button> <button class="settingsColorOptionButton" data-id="backColorFour"></button> <button class="settingsColorOptionButton" data-id="backColorFive"></button><div id="backPickOwnColorDiv">Farbe wählen</div></div>
+                    <div class="settingsColorOptionButtonDiv"><button class="settingsColorOptionButton" data-id="backColorOne"></button> <button class="settingsColorOptionButton" data-id="backColorTwo"></button> <button class="settingsColorOptionButton" data-id="backColorThree"></button> <button class="settingsColorOptionButton" data-id="backColorFour"></button> <button class="settingsColorOptionButton" data-id="backColorFive"></button><div id="backPickOwnColorDiv"></div></div>
                 </div>
             </div>
 
             <div class="sizeOption-group" data-category="size">
-                <div><h2 class="sizeTWOHeader">Size</h2> <span id="pxAndUnitOutputSpan">px~cm</span></div>
+                <div id="sizeHeaderDiv"><h2 class="sizeTWOHeader">Size</h2> <span id="pxAndUnitOutputSpan">1024 px~ 8,7cm</span></div>
                 <div id="sizeSliderDiv"></div>  
-                <div><button class="settingsOptionButton" data-id="businessCard"></button><button class="settingsOptionButton" data-id="web"></button><button class="settingsOptionButton" data-id="poster"></button></div>
+                <div class="settingsOptionButtonDiv"><button class="settingsOptionButton" data-id="businessCard">Business Card</button><button class="settingsOptionButton" data-id="web">Web</button><button class="settingsOptionButton" data-id="poster">Poster</button></div>
             </div>
 
             <div class="downloadPrint-group" data-category="printDown">
-                <div><button id="downloadPNGBtn"></button></div>
-                <div><button class="svgPrintBtns" id="downloadAsSVGBtn"></button><button class="svgPrintBtns" id="printButton"></button></div>
+                <div><button id="downloadPNGBtn">Download as PNG</button></div>
+                <div id="svgAndPrintBtnDiv"><button class="svgPrintBtns" id="downloadAsSVGBtn">As SVG</button><button class="svgPrintBtns" id="printButton">Print</button></div>
             </div>
         </section>
     </main>

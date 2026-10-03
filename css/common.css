@@ -20,7 +20,9 @@ body{
     --text-color-reverse: black;
     --text-color-secondary: #6B7280;
     --cyan-highlight: #00E5C7;
-    --border-color-primary: #6B7280;
+    --cyan-highlight-shimmer: #01ffdd17;
+    --border-color-primary: #6b7280af;
+    --border-color-secondary: #6b72807e;
     --errorColor:red;
     --cautionColor:red;
 }

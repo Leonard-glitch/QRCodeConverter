@@ -71,8 +71,6 @@ main{
                 color: var(--text-color-reverse);
                 padding: 0.5rem;
                 font-size: 0.875rem;
-
-                flex-self: flex-end;
             }
         .historyDivMain{
             display: flex;
