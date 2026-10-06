@@ -17,6 +17,7 @@ main{
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        width: 50%;
         gap: 1rem;
     }
         .levelOneTopDiv{
@@ -25,7 +26,8 @@ main{
         }
             .sizeTHREEHeader{
                 color: var(--text-color-secondary);
-                font-size: 0.5rem;
+                font-size: 0.6rem;
+                font-weight: 600;
             }
         .levelTwoTopDiv{
             display: flex;
@@ -36,7 +38,7 @@ main{
                 flex-direction: column;
 
                 color: var(--text-color-primary);
-                font-size: 1.5rem;
+                font-size: 2.35rem;
             }
         .levelThreeTopDiv{
             display: flex;
@@ -44,37 +46,54 @@ main{
         }
             .sizeTWOHeader{
                 color: var(--text-color-secondary);
-                font-size: 0.875rem;
+                font-size: 0.865rem;
             }
         .codeInput-GenerateCodeDiv{
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            font-size: 2rem;
-            padding: 0.2rem;
-            border: 1px solid var(--border-color-primary);
-            border-radius: 10px;
-            background-color: var(--background-color-secondary);
+            width: 100%;
+            position: relative;
         }
             #linkInputField{
-                background-color: transparent;
-                border: none;
-                color: var(--text-color-primary);
-                font-size: 1em;
                 width: 100%;
+                box-sizing: border-box;
+                
+                padding: 0.7rem;
+                padding-right: 160px;
+                
+                border: 1px solid var(--border-color-primary);
+                border-radius: 10px;
+                background-color: transparent;
+                color: var(--text-color-primary);
+                font-size: 1.3rem;
+
+                box-sizing: border-box;
+                transition: border-color 0.2s, box-shadow 0.2s;
+            }
+            #linkInputField:focus{
+                border-color: var(--cyan-highlight);
+                box-shadow: 0 0 0 2px var(--cyan-highlight); 
+                outline: none;
             }
             #generateCodeButton{
+                position: absolute;
+                right: 5px;
+                top: 50%;
+                transform: translateY(-50%);
+                
                 text-decoration: none;
                 background-color: var(--cyan-highlight);
                 border: none;
-                border-radius: 10px;
+                border-radius: 8px;
                 color: var(--text-color-reverse);
-                padding: 0.5rem;
-                font-size: 0.875rem;
+                padding: 0.4rem 0.8rem;
+                height: 85%;
+                font-size: 1rem;
+                cursor: pointer;
             }
+
         .historyDivMain{
             display: flex;
             flex-direction: column;
+            width: 80%;
             gap: 0.4rem;
         }
             .historyHeaderDiv{
@@ -82,6 +101,7 @@ main{
                 flex-direction: row;
                 justify-content: space-between;
                 align-items: center;
+                width: 60%;
             }
                 #latestInputsLabel{
                     color: var(--text-color-primary);
@@ -96,7 +116,8 @@ main{
                     background-color: transparent;
                     border: none;
                     color: var(--text-color-secondary);
-                    font-size: 0.4rem;
+                    font-size: 0.68rem;
+                    font-weight: 600;
                 }
                 #deleteHistoryButton:hover{
                     cursor: pointer;
@@ -106,12 +127,24 @@ main{
                 display: flex;
                 flex-direction: column;
                 gap: 0.2rem;
+
+                height: 10rem;
+
+                border: 1px solid var(--border-color-primary);
             }
 
+    .qrCodeExampleImgDiv{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+        #qrCodeExampleImg{
+            height: 25rem;
+        }
 
 
-
-
+/* Carousel Styles*/
 
 
 

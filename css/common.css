@@ -86,8 +86,13 @@ a{
         gap: 50px;
     }
         #headerHowItWorksBTN{
+            display: flex;
+            justify-content: center;
+            align-items: center;
             color: var(--text-color-secondary);
-            font-size: 0.5rem;
+            font-size: 0.67rem;
+
+            padding-top: 2px;
         }
         #headerHowItWorksBTN:hover{
             color: var(--text-color-primary);
@@ -115,4 +120,39 @@ a{
         #headerSettingsBTN:hover{
             color: var(--text-color-primary);
             cursor: pointer;
+        }
+
+
+
+
+
+/* Footer Styles */
+
+.footerContainerMain{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    gap: 1rem;
+
+    padding: 5rem 0 1rem 0;
+}
+    .copyYearNameFooter{
+        text-align: center;
+        color: var(--text-color-secondary);
+        font-size: 0.775rem;
+    }
+
+    .imprintAndPrivacyFooterDiv{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 3rem;
+
+        color: var(--text-color-secondary);
+    }
+        .footerLink{
+            color: var(--text-color-secondary);
+            font-size: 0.875rem;
         }

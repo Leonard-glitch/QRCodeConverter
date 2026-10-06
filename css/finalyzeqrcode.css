@@ -113,6 +113,8 @@ main{
     }
 
     #textToInputField{
+        display: block;
+
         background-color: var(--background-color-secondary);
         padding: 0.6rem;
         border: 1px solid var(--border-color-primary);
@@ -120,10 +122,14 @@ main{
         color: var(--text-color-primary);
         font-size: 1rem;
         width: 100%;
+        box-sizing: border-box;
+        transition: border-color 0.2s, box-shadow 0.2s;
     }
+
     #textToInputField:focus{
         outline: none;
-        border: 3px solid var(--cyan-highlight);
+        border-color: var(--cyan-highlight);
+        box-shadow: 0 0 0 2px var(--cyan-highlight); 
     }
 
     #uploadImageButton{
@@ -156,7 +162,7 @@ main{
                     cursor: pointer;
                 }
                 .settingsColorOptionButton.active{
-                    border: 1px solid var(--cyan-highlight);
+                    border: 2px solid var(--cyan-highlight);
                 }
 
                 #codePickOwnColorDiv{
@@ -232,3 +238,107 @@ main{
                 text-align: center;
                 width: 100%;
             }
+
+
+
+@media (max-width: 1600px) {
+    body{
+        padding: 10px 15%;
+    }
+}
+
+@media (max-width: 1400px) {
+    body{
+        padding: 10px 10%;
+    }
+}
+
+@media (max-width: 1200px) {
+    body{
+        padding: 10px 5%;
+        main{
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+}
+
+@media (max-width: 1000px) {
+    body{
+        padding: 10px 10px;
+        main{
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+}
+
+@media (max-width: 900px) {
+    body{
+        padding: 10px 10px;
+    }
+    main{
+        flex-direction: column;
+        align-items: center;
+    }
+    #qrCodeLivePrewSec{
+        width: 80%;
+    }
+    #settingsSection{
+        width: 80%;
+    }
+    
+}
+
+@media (max-width: 700px) {
+    body{
+        padding: 10px 10px;
+    }
+    main{
+        flex-direction: column;
+        align-items: center;
+    }
+    #qrCodeLivePrewSec{
+        width: 98%;
+    }
+    #settingsSection{
+        width: 98%;
+    }
+    
+}
+/* =========================================================
+   7. PHABLETS / MOBILE LANDSCAPE (unter 600px)
+   ========================================================= */
+@media (max-width: 599px) {
+    .grid-layout {
+        grid-template-columns: 1fr; /* Wechsel auf 1-Spalten-Layout */
+    }
+}
+
+/* =========================================================
+   8. SMARTPHONES PRO MAX / PLUS (unter 480px)
+   ========================================================= */
+@media (max-width: 479px) {
+    :root {
+        --content-padding: 1rem;
+    }
+}
+
+/* =========================================================
+   9. STANDARD SMARTPHONES (unter 414px)
+   ========================================================= */
+@media (max-width: 413px) {
+    :root {
+        --content-padding: 0.875rem;
+    }
+}
+
+/* =========================================================
+   10. EXTREM KLEINE DISPLAYS / SMARTWATCHES (unter 360px)
+   ========================================================= */
+@media (max-width: 359px) {
+    :root {
+        --content-padding: 0.5rem;
+        --font-scale: 0.85;
+    }
+}
