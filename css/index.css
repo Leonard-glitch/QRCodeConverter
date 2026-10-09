@@ -12,6 +12,8 @@ main{
     display: flex;
     flex-direction: row;
     align-items: center;
+
+    margin-top: 6rem;
 }
     .sloganAndInputDiv{
         display: flex;
@@ -93,7 +95,7 @@ main{
         .historyDivMain{
             display: flex;
             flex-direction: column;
-            width: 80%;
+            width: 100%;
             gap: 0.4rem;
         }
             .historyHeaderDiv{
@@ -101,7 +103,6 @@ main{
                 flex-direction: row;
                 justify-content: space-between;
                 align-items: center;
-                width: 60%;
             }
                 #latestInputsLabel{
                     color: var(--text-color-primary);
@@ -129,18 +130,73 @@ main{
                 gap: 0.2rem;
 
                 height: 10rem;
-
-                border: 1px solid var(--border-color-primary);
             }
+                .historyEntryElement{
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    align-items: center;
+
+                    padding: 0;
+                    border: 1px solid var(--border-color-primary);
+                    border-radius: 9px;
+                    width: 100%;
+                }
+                    .historyEntryLinkBtn{
+                        text-decoration: none;
+                        background: transparent;
+                        border: none;
+
+                        padding: 0.6rem;
+                        color: var(--text-color-secondary);
+                        font-size: 0.9rem;
+                        font-weight: 550;
+
+                        white-space: nowrap;
+                        overflow-x: auto;   
+                        text-align: left;   
+                        flex: 1;            
+                        min-width: 0;       
+
+                        scrollbar-width: none;
+                        -ms-overflow-style: none;
+                    }
+                    .historyEntryLinkBtn::-webkit-scrollbar{
+                        display: none;
+                    }
+                    .historyEntryLinkBtn:hover{
+                        color: var(--text-color-primary);
+                        cursor: pointer;
+                    }
+                    .historyEntryDeleteBtn{
+                        text-decoration: none;
+                        background: transparent;
+                        border: none;
+
+                        padding: 0.6rem;
+                        color: var(--text-color-secondary);
+                        font-size: 0.9rem;
+                        font-weight: 550;
+
+                        flex-shrink: 0;
+                    }
+                    .historyEntryDeleteBtn:hover{
+                        color: var(--cautionColor);
+                        cursor: pointer;
+                    }
 
     .qrCodeExampleImgDiv{
         display: flex;
-        flex-direction: row;
         align-items: center;
         justify-content: center;
+        flex: 1;
+        width: 100%;
     }
         #qrCodeExampleImg{
-            height: 25rem;
+            width: 100%;
+            max-width: 22rem;
+            height: auto;
+            object-fit: contain;
         }
 
 
