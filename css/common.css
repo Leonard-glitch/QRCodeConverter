@@ -156,3 +156,12 @@ a{
             color: var(--text-color-secondary);
             font-size: 0.875rem;
         }
+
+
+
+
+@media (max-width: 600px) {
+    .footerContainerMain{
+        flex-direction: column;
+    }
+}

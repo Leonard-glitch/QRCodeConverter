@@ -200,48 +200,72 @@ main{
         }
 
 
+
+
+
+@media (max-width: 1600px) {
+    body{
+        padding: 10px 15%;
+    }
+}
+
+@media (max-width: 1400px) {
+    body{
+        padding: 10px 10%;
+    }
+}
+
+@media (max-width: 1200px) {
+    body{
+        padding: 10px 1%;
+    }
+}
+
+@media (max-width: 1000px) {
+    body{
+        padding: 10px 10px;
+    }
+    #topSection{
+        flex-direction: column-reverse;
+        margin-top: 1rem;
+    }
+    .sloganAndInputDiv{
+        width: 70%;
+        margin-top: 2rem;
+    }
+}
+
+@media (max-width: 900px) {
+    body{
+        padding: 10px 0;
+    }
+    .sloganAndInputDiv{
+        width: 85%;
+    }
+    
+}
+
+@media (max-width: 700px) {
+    body{
+        padding: 10px 0;
+    }
+    .sloganAndInputDiv{
+        width: 98%;
+    }
+    
+}
+
+@media (max-width:600px){
+    #generateCodeButton{
+        position:relative;
+        width: 100%;
+        display: block;
+        margin-top: 1.3rem;
+        margin: 1.3rem 0 0 6px;
+    }
+}
+
 /* Carousel Styles*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* =========================================================
            1. ANPASSBARE CSS-VARIABLEN (Hier Farben & Abstände ändern)
@@ -279,14 +303,6 @@ main{
         }
     }
 
-        /* =========================================================
-           2. BASIC RESET & LAYOUT
-           ========================================================= */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
 
        /* body {
             background-color: var(--bg-color);

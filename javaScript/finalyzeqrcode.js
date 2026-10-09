@@ -13,23 +13,26 @@ const shapeConfig = {
     },
 };
 
+const textToInputField=document.getElementById("textToInputField");
+
+textToInputField.value="Scan Me";
+
 
 const colors={
     codeColors:{
-        color1:'black',
-        color2:'',
-        color3:'',
-        color4:'',
-        color5:''
+        color1: '#0b0f17',
+        color2: '#000000',
+        color3: '#0e5a4d',
+        color4: '#13326b',
+        color5: '#7b1d3d' 
     },
     bgColors:{
-        color1:'black',
-        color2:'',
-        color3:'',
-        color4:'',
-        color5:''
+        color1: '#ffffff',
+        color2: '#eff2f5',
+        color3: '#fff7e6',
+        color4: '#e0fcf6',
     }
-}
+};
 
 const preDesigns={
     classic:{
@@ -95,7 +98,60 @@ const preDesigns={
 };
 
 
+function loadColors(){
+    document.querySelectorAll('.colorsOption-group').forEach(group => {
+        // Greift direkt auf colors.codeColors oder colors.bgColors zu
+        const colorObj = colors[group.dataset.category]; 
+        if (!colorObj) return;
 
-const textToInputField=document.getElementById("textToInputField");
+        group.querySelectorAll('.settingsColorOptionButton').forEach(button => {
+            const colorKey = button.dataset.id; // z. B. "color1"
+            const colorValue = colorObj[colorKey];
 
-textToInputField.value="Scan Me";
+            if (colorValue) {
+                button.style.backgroundColor = colorValue;
+            }
+        });
+    });
+}
+
+
+document.querySelectorAll('.colorsOption-group').forEach(group => {
+    const categoryKey = group.dataset.category; // "codeColors" oder "bgColors"
+    const picker = group.querySelector('.color-picker-input');
+
+    if (!picker) return;
+
+    picker.addEventListener('input', (event) => {
+        const selectedColor = event.target.value;
+
+
+        // Aktiven Button genau in DIESER Gruppe finden
+        const activeBtn = group.querySelector('.settingsColorOptionButton.active');
+
+    });
+});
+
+
+const slider = document.getElementById('sizeSlider');
+
+function updateSlider() {
+    const min = slider.min || 0;
+    const max = slider.max || 100;
+    const val = slider.value;
+    
+    // Berechnet den prozentualen Wert für die Füllung
+    const percentage = ((val - min) / (max - min)) * 100;
+
+    // Setzt den Hintergrund: Links Türkis (#00ffda), rechts Dunkelblau/Schwarz (#121820)
+    slider.style.background = `linear-gradient(to right, var(--cyan-highlight) ${percentage}%, var(--background-color-secondary) ${percentage}%)`;
+}
+
+// Event-Listener für Live-Aktualisierung beim Ziehen
+slider.addEventListener('input', updateSlider);
+
+
+
+
+updateSlider();
+loadColors();
