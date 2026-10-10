@@ -63,8 +63,3 @@ document.addEventListener('DOMContentLoaded', () => {
     autoScroll();
 });
 
-const generateCodeButton = document.getElementById('generateCodeButton');
-
-generateCodeButton.addEventListener('click', () => {
-    window.location.href = "finalyzeqrcode.html";
-});

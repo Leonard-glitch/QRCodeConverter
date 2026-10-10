@@ -22,7 +22,7 @@
                 <div class="levelOneTopDiv"><p class="sizeTHREEHeader">Free · No sign-up · In seconds</p></div>
                 <div class="levelTwoTopDiv"><h1 class="sizeONEHeader"><span>A link.</span><span>A code.</span><span>Ready to scan.</span></h1></div>
                 <div class="levelThreeTopDiv"><p class="sizeTWOHeader">Paste your link and instantly get a print-quality QR code — right in your browser, with no extra steps.</p></div>
-                <div class="codeInput-GenerateCodeDiv"><input type="text" placeholder="https://your-link.com" id="linkInputField" autocomplete="off"><button id="generateCodeButton">Generate QR Code</button></div>
+                <div class="codeInput-GenerateCodeDiv"><input type="text" placeholder="https://your-link.com" id="linkInputField" autocomplete="off"><button id="generateCodeButton">Generate QR Code</button><div id="errorBox"></div></div>
                 <div class="historyDivMain"><div class="historyHeaderDiv"><h2 id="latestInputsLabel">Latest inputs</h2> <button id="deleteHistoryButton">Delete  history</button></div> <div id="historyContainer"><div class="historyEntryElement"><button class="historyEntryLinkBtn">https://gemini.google.com/app/3cc8aeb0e5708089?hl=de</button><button class="historyEntryDeleteBtn">&#10006;</button></div></div></div>
             </div>
             <div class="qrCodeExampleImgDiv"><img src="./images/qr-decorativeQRCode.svg" alt="QR Code Example" id="qrCodeExampleImg"></div>
@@ -85,6 +85,93 @@
         </section>
     </main>
     <footer class="footerContainerMain"><div class="copyYearNameFooter">&copy; 2026 linqr</div> <div class="imprintAndPrivacyFooterDiv"><a href="" class="footerLink">Imprint</a> <a href="" class="footerLink">Privacy Policy</a></div></footer>
-<script src="./javaScript/index.js"></script>
+    <script src="./javaScript/common.js"></script>
+    <script src="./javaScript/index.js"></script>
+
+
+
+    <dialog id="settingsDialog" class="settings-modal">
+        <div class="settings-content">
+            <div class="settings-header">
+                <div class="settings-title-wrapper">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--cyan-highlight);"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <h3>Settings</h3>
+                </div>
+                <button id="closeSettingsBTN" class="close-btn" aria-label="Close settings">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            
+            <div class="settings-body">
+                <!-- Save History -->
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <span class="setting-label">Save History</span>
+                        <span class="setting-desc">Store recent QR code generations locally</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="historyToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="setting-divider"></div>
+
+                <!-- Design Dark/Light -->
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <span class="setting-label">Appearance</span>
+                        <span class="setting-desc">Select your preferred color theme</span>
+                    </div>
+                    <div class="theme-switcher">
+                        <button class="theme-option active" data-theme="dark">Dark</button>
+                        <button class="theme-option" data-theme="light">Light</button>
+                    </div>
+                </div>
+
+                <div class="setting-divider"></div>
+
+                <!-- Language comming soon-->
+                <div class="setting-row" id="languageSec">
+                    <div class="setting-info">
+                        <span class="setting-label">Language</span>
+                        <span class="setting-desc">Choose user interface language</span>
+                    </div>
+                    <div class="select-wrapper">
+                        <select id="languageSelect" class="lang-select">
+                            <option value="en">English</option>
+                            <option value="de">Deutsch</option>
+                        </select>
+                        <svg class="select-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </dialog>
+
+    <dialog id="howItWorksDialog" class="settings-modal">
+        <div class="settings-content">
+            <div class="settings-header">
+                <h3>Here's how it works</h3>
+                <button id="closeHowItWorksBTN" class="close-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="settings-body">
+                <div class="step-row">
+                    <span class="step-num">1</span>
+                    <p>Paste your link into the input field.</p>
+                </div>
+                <div class="step-row">
+                    <span class="step-num">2</span>
+                    <p>Press the button "Generate QR Code" and your code will gt generated automatically.</p>
+                </div>
+                <div class="step-row">
+                    <span class="step-num">3</span>
+                    <p>You can personalize your code and download or print it.</p>
+                </div>
+            </div>
+        </div>
+    </dialog>
 </body>
 </html>
