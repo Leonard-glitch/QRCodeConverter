@@ -29,7 +29,7 @@ const preDesigns = {
     soft:    { name: 'Soft',    frame: 'none',    pattern: 'round',   corners: 'rounded', symbol: 'none',  codeColor: 'color1', bgColor: 'color1', size: 'web' },
     scanme:  { name: 'Scan me', frame: 'bars',    pattern: 'round',   corners: 'rounded', symbol: 'none',  codeColor: 'color1', bgColor: 'color1', size: 'web' },
     points:  { name: 'Points',  frame: 'bubble',  pattern: 'dots',    corners: 'circle',  symbol: 'none',  codeColor: 'color4', bgColor: 'color3', size: 'web' },
-    lines:   { name: 'Lines',   frame: 'corners', pattern: 'lines',   corners: 'rounded', symbol: 'none',  codeColor: 'color3', bgColor: 'color4', size: 'web' },
+    lines:   { name: 'Lines',   frame: 'bars',    pattern: 'lines',   corners: 'rounded', symbol: 'none',  codeColor: 'color3', bgColor: 'color4', size: 'web' },
     brand:   { name: 'Brand',   frame: 'none',    pattern: 'round',   corners: 'circle',  symbol: 'brand', codeColor: 'color1', bgColor: 'color1', size: 'web' }
 };
 
@@ -50,7 +50,7 @@ const state = {
     link: '',
     design: 'classic',
     frame: 'none',
-    frameText: 'Scan Me',
+    frameText: 'Scan me',
     pattern: 'squares',
     corners: 'sharp',
     symbol: 'none',
@@ -93,6 +93,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
         await loadScript(QR_LIB_URL);
+        renderDesignPreviews();
         render();
     } catch {
         setPreviewMessage('The QR code could not be generated. Please check your internet connection and reload the page.');
@@ -124,6 +125,7 @@ async function loadBrandImage() {
         if (!res.ok) throw new Error();
         const blob = await res.blob();
         state.brandImage = await blobToDataURL(blob);
+        renderDesignPreviews();
         if (state.symbol === 'brand') render();
     } catch {
         state.brandImage = null; // Fallback: Link-Icon
@@ -157,24 +159,118 @@ function loadColors() {
     });
 }
 
+// Uses the existing HTML container; no HTML or CSS changes required.
 function buildDesignButtons() {
     const container = document.getElementById('designsContainerDiv');
     if (!container) return;
+    installDesignStyles();
     container.classList.add('settingsOptionButtonDiv');
-    container.innerHTML = '';
+    container.setAttribute('role', 'group');
+    container.setAttribute('aria-label', 'QR code designs');
+    container.replaceChildren();
     Object.entries(preDesigns).forEach(([id, d]) => {
         const btn = document.createElement('button');
-        btn.className = 'settingsOptionButton';
+        btn.type = 'button';
+        btn.className = 'settingsOptionButton linqr-design-card';
         btn.dataset.id = id;
-        btn.textContent = d.name;
+        btn.setAttribute('aria-label', d.name + ' design');
+        btn.setAttribute('aria-pressed', 'false');
+        const preview = document.createElement('span');
+        preview.className = 'linqr-design-preview';
+        preview.setAttribute('aria-hidden', 'true');
+        preview.textContent = 'Loading…';
+        const label = document.createElement('span');
+        label.className = 'linqr-design-label';
+        label.textContent = d.name;
+        btn.append(preview, label);
         btn.addEventListener('click', () => applyDesign(id));
         container.appendChild(btn);
     });
 }
 
+function installDesignStyles() {
+    if (document.getElementById('linqr-design-styles')) return;
+    const style = document.createElement('style');
+    style.id = 'linqr-design-styles';
+    style.textContent = `
+        #designsContainerDiv {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: .45rem;
+            width: 100%;
+        }
+        #designsContainerDiv .linqr-design-card {
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: space-between; min-width: 0; width: 100%;
+            padding: .45rem .4rem .5rem; gap: .35rem;
+            border-radius: 8px; font-family: inherit;
+            background: var(--background-color-secondary);
+            border: 1px solid var(--border-color-secondary);
+            color: var(--text-color-secondary); cursor: pointer;
+            transition: border-color .15s, background-color .15s;
+        }
+        #designsContainerDiv .linqr-design-card:hover {
+            border-color: var(--text-color-primary);
+            color: var(--text-color-primary);
+        }
+        #designsContainerDiv .linqr-design-card.active {
+            border-color: var(--cyan-highlight);
+            background: var(--cyan-highlight-shimmer);
+            color: var(--cyan-highlight);
+        }
+        #designsContainerDiv .linqr-design-card:focus-visible {
+            outline: 2px solid var(--cyan-highlight); outline-offset: 3px;
+        }
+        #designsContainerDiv .linqr-design-preview {
+            display: flex; align-items: center; justify-content: center;
+            width: 100%; aspect-ratio: 1 / 1.2; min-width: 0;
+            overflow: hidden; font-size: .6rem;
+        }
+        #designsContainerDiv .linqr-design-preview svg {
+            display: block; width: 100%; height: 100%;
+        }
+        #designsContainerDiv .linqr-design-label {
+            font-size: .6rem; line-height: 1.4; text-align: center;
+            overflow-wrap: anywhere; letter-spacing: 0;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            #designsContainerDiv .linqr-design-card { transition: none; }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+function designOptions(id) {
+    const d = preDesigns[id];
+    return {
+        ...state, ...d,
+        frameText: id === 'lines' ? 'Scan now' : 'Scan me',
+        codeColor: colors.codeColors[d.codeColor],
+        bgColor: colors.bgColors[d.bgColor]
+    };
+}
+
+// Render each real QR preset independently, without changing the live selection.
+function renderDesignPreviews() {
+    if (!window.qrcode) return;
+    document.querySelectorAll('#designsContainerDiv .linqr-design-card').forEach(btn => {
+        const preview = btn.querySelector('.linqr-design-preview');
+        if (!preview) return;
+        try {
+            const options = designOptions(btn.dataset.id);
+            const matrix = buildMatrix(options);
+            preview.innerHTML = buildSVG(undefined, options, matrix).svg;
+        } catch {
+            preview.textContent = 'Preview unavailable';
+        }
+    });
+}
+
 function setActive(container, selector, id) {
     container?.querySelectorAll(selector).forEach(b => {
-        b.classList.toggle('active', b.dataset.id === id);
+        const active = b.dataset.id === id;
+        b.classList.toggle('active', active);
+        if (b.classList.contains('linqr-design-card')) b.setAttribute('aria-pressed', String(active));
     });
 }
 
@@ -190,6 +286,10 @@ function applyDesign(id, doRender = true) {
     state.pattern = d.pattern;
     state.corners = d.corners;
     state.symbol = d.symbol;
+    state.frameText = designOptions(id).frameText;
+    const frameInput = document.getElementById('textToInputField');
+    if (frameInput) frameInput.value = state.frameText;
+    document.getElementById('uploadImageButton')?.classList.remove('active');
     state.codeColor = colors.codeColors[d.codeColor];
     state.bgColor = colors.bgColors[d.bgColor];
     state.sliderValue = sizePresets[d.size];
@@ -272,6 +372,7 @@ function bindFrameText() {
     field.placeholder = 'Frame text';
     field.addEventListener('input', () => {
         state.frameText = field.value;
+        clearDesign();
         render();
     });
 }
@@ -400,17 +501,17 @@ function syncSlider() {
     slider.style.background = `linear-gradient(to right, var(--cyan-highlight) ${pct}%, var(--background-color-secondary) ${pct}%)`;
 
     const px = getPixelSize();
-    const cm = (px / PRINT_DPI * 2.54).toFixed(1).replace('.', ',');
+    const cm = (px / PRINT_DPI * 2.54).toFixed(1);
     if (out) out.textContent = `${px} px ~ ${cm} cm`;
 }
 
 // =====================================================
 // QR-Matrix & SVG-Aufbau
 // =====================================================
-function buildMatrix() {
-    const ecc = state.symbol !== 'none' ? 'H' : 'M'; // Symbol verdeckt Module -> höhere Fehlerkorrektur
+function buildMatrix(options = state) {
+    const ecc = options.symbol !== 'none' ? 'H' : 'M'; // Symbol verdeckt Module -> höhere Fehlerkorrektur
     const qr = window.qrcode(0, ecc);
-    qr.addData(unescape(encodeURIComponent(state.link))); // UTF-8
+    qr.addData(unescape(encodeURIComponent(options.link))); // UTF-8
     qr.make();
     const n = qr.getModuleCount();
     return { n, isDark: (r, c) => qr.isDark(r, c) };
@@ -429,16 +530,16 @@ function getSymbolSize(n) {
     return s;
 }
 
-function modulesSVG(m, ox, oy, color) {
+function modulesSVG(m, ox, oy, color, options = state) {
     const { n } = m;
-    const hasSymbol = state.symbol !== 'none' && getSymbolContent() !== '';
+    const hasSymbol = options.symbol !== 'none' && getSymbolContent(options) !== '';
     const sym = hasSymbol ? getSymbolSize(n) + 2 : 0;
     const sStart = Math.floor((n - sym) / 2);
     const inSymbol = (r, c) => hasSymbol && r >= sStart && r < sStart + sym && c >= sStart && c < sStart + sym;
     const dark = (r, c) => r >= 0 && c >= 0 && r < n && c < n && m.isDark(r, c) && !isFinder(r, c, n) && !inSymbol(r, c);
 
     let out = '';
-    if (state.pattern === 'lines') {
+    if (options.pattern === 'lines') {
         // Horizontale Module zu Linien zusammenfassen
         for (let r = 0; r < n; r++) {
             let c = 0;
@@ -456,9 +557,9 @@ function modulesSVG(m, ox, oy, color) {
             for (let c = 0; c < n; c++) {
                 if (!dark(r, c)) continue;
                 const x = ox + c, y = oy + r;
-                if (state.pattern === 'dots') {
+                if (options.pattern === 'dots') {
                     out += `<circle cx="${x + 0.5}" cy="${y + 0.5}" r="0.42"/>`;
-                } else if (state.pattern === 'round') {
+                } else if (options.pattern === 'round') {
                     out += `<rect x="${x + 0.04}" y="${y + 0.04}" width="0.92" height="0.92" rx="0.38"/>`;
                 } else {
                     // leicht überlappend, damit keine Haarlinien entstehen
@@ -470,8 +571,8 @@ function modulesSVG(m, ox, oy, color) {
     return `<g fill="${color}">${out}</g>`;
 }
 
-function finderSVG(x, y, color, bg) {
-    const style = state.corners;
+function finderSVG(x, y, color, bg, options = state) {
+    const style = options.corners;
     if (style === 'circle') {
         return `<circle cx="${x + 3.5}" cy="${y + 3.5}" r="3" fill="none" stroke="${color}" stroke-width="1"/>` +
                `<circle cx="${x + 3.5}" cy="${y + 3.5}" r="1.5" fill="${color}"/>`;
@@ -482,25 +583,25 @@ function finderSVG(x, y, color, bg) {
            `<rect x="${x + 2}" y="${y + 2}" width="3" height="3" rx="${innerR}" fill="${color}"/>`;
 }
 
-function getSymbolContent() {
-    if (state.symbol === 'upload') return state.uploadedImage ? 'img' : '';
-    if (state.symbol === 'brand') return 'brand';
-    return symbolIcons[state.symbol] ? 'icon' : '';
+function getSymbolContent(options = state) {
+    if (options.symbol === 'upload') return options.uploadedImage ? 'img' : '';
+    if (options.symbol === 'brand') return 'brand';
+    return symbolIcons[options.symbol] ? 'icon' : '';
 }
 
-function symbolSVG(n, ox, oy, color, bg) {
-    const kind = getSymbolContent();
+function symbolSVG(n, ox, oy, color, bg, options = state) {
+    const kind = getSymbolContent(options);
     if (!kind) return '';
     const s = getSymbolSize(n);
     const x = ox + (n - s) / 2, y = oy + (n - s) / 2;
     const pad = s * 0.12;
     let out = `<rect x="${x}" y="${y}" width="${s}" height="${s}" rx="${s * 0.22}" fill="${bg}"/>`;
 
-    if (kind === 'img' || (kind === 'brand' && state.brandImage)) {
-        const href = kind === 'img' ? state.uploadedImage : state.brandImage;
+    if (kind === 'img' || (kind === 'brand' && options.brandImage)) {
+        const href = kind === 'img' ? options.uploadedImage : options.brandImage;
         out += `<image href="${href}" x="${x + pad}" y="${y + pad}" width="${s - 2 * pad}" height="${s - 2 * pad}" preserveAspectRatio="xMidYMid meet"/>`;
     } else {
-        const icon = symbolIcons[state.symbol] || symbolIcons.link; // Brand-Fallback
+        const icon = symbolIcons[options.symbol] || symbolIcons.link; // Brand-Fallback
         const scale = (s - 2 * pad) / 24;
         const filled = icon.includes('data-fill');
         out += `<g transform="translate(${x + pad} ${y + pad}) scale(${scale})" fill="${filled ? color : 'none'}" stroke="${color}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${icon}</g>`;
@@ -509,19 +610,18 @@ function symbolSVG(n, ox, oy, color, bg) {
 }
 
 // Liefert vollständiges SVG (als String) für Vorschau & Export
-function buildSVG(outputPx) {
-    const m = qrMatrix;
+function buildSVG(outputPx, options = state, m = qrMatrix) {
     const n = m.n;
     const q = 4;                // Ruhezone
     const S = n + 2 * q;        // Kantenlänge des Codes inkl. Ruhezone
-    const code = state.codeColor, bg = state.bgColor;
-    const text = esc(state.frameText.trim());
+    const code = options.codeColor, bg = options.bgColor;
+    const text = esc(options.frameText.trim());
     const font = `font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="800"`;
 
     let W = S, H = S, codeX = 0, codeY = 0, frame = '', textEl = '';
     const textSize = Math.max(2.4, S * 0.075);
 
-    switch (state.frame) {
+    switch (options.frame) {
         case 'bars': {
             const bar = textSize * 2.2;
             H = S + bar;
@@ -531,15 +631,21 @@ function buildSVG(outputPx) {
             break;
         }
         case 'bubble': {
-            const pad = 2, tail = 2.5, label = textSize * 2.4;
+            const pad = 1, label = textSize * 2.6;
             W = S + 2 * pad;
-            H = S + 2 * pad + tail + label;
+            H = S + 2 * pad + label;
             codeX = pad; codeY = pad;
-            const bx = W / 2, by = S + 2 * pad;
-            frame = `<rect x="0" y="0" width="${W}" height="${S + 2 * pad}" rx="${S * 0.08}" fill="${code}"/>` +
-                    `<polygon points="${bx - tail},${by - 0.1} ${bx + tail},${by - 0.1} ${bx},${by + tail}" fill="${code}"/>` +
-                    `<rect x="${pad * 0.8}" y="${pad * 0.8}" width="${S + pad * 0.4}" height="${S + pad * 0.4}" rx="${S * 0.06}" fill="${bg}"/>`;
-            if (text) textEl = `<text x="${W / 2}" y="${by + tail + label / 2}" dominant-baseline="central" text-anchor="middle" font-size="${textSize}" ${font} fill="${code}">${text}</text>`;
+            const labelWidth = W * .62, labelHeight = textSize * 1.9;
+            const labelX = (W - labelWidth) / 2;
+            const labelY = S + pad;
+            frame = `<rect width="${W}" height="${H}" rx="${S * .06}" fill="${code}"/>` +
+                    `<rect x="${pad}" y="${pad}" width="${W - 2 * pad}" height="${H - 2 * pad}" rx="${S * .045}" fill="${bg}"/>`;
+            if (text) {
+                frame += `<rect x="${labelX}" y="${labelY}" width="${labelWidth}" height="${labelHeight}" rx="${labelHeight / 2}" fill="${code}"/>` +
+                         `<path d="M${W / 2 - 1.2} ${labelY + .1}L${W / 2} ${labelY - 1.3}L${W / 2 + 1.2} ${labelY + .1}Z" fill="${code}"/>`;
+                const fittedSize = Math.min(textSize, labelWidth / Math.max(1, Array.from(options.frameText.trim()).length) / .65);
+                textEl = `<text x="${W / 2}" y="${labelY + labelHeight / 2}" dominant-baseline="central" text-anchor="middle" font-size="${fittedSize}" ${font} fill="${bg}">${text}</text>`;
+            }
             break;
         }
         case 'corners': {
@@ -553,15 +659,15 @@ function buildSVG(outputPx) {
     }
 
     const ox = codeX + q, oy = codeY + q;
-    const background = state.frame === 'bars' ? '' : `<rect width="${W}" height="${H}" fill="${bg}"/>`;
+    const background = ['bars', 'bubble'].includes(options.frame) ? '' : `<rect width="${W}" height="${H}" fill="${bg}"/>`;
 
     const body =
         background + frame +
-        modulesSVG(m, ox, oy, code) +
-        finderSVG(ox, oy, code, bg) +
-        finderSVG(ox + n - 7, oy, code, bg) +
-        finderSVG(ox, oy + n - 7, code, bg) +
-        symbolSVG(n, ox, oy, code, bg) +
+        modulesSVG(m, ox, oy, code, options) +
+        finderSVG(ox, oy, code, bg, options) +
+        finderSVG(ox + n - 7, oy, code, bg, options) +
+        finderSVG(ox, oy + n - 7, code, bg, options) +
+        symbolSVG(n, ox, oy, code, bg, options) +
         textEl;
 
     const pxW = outputPx ? Math.round(outputPx) : null;
@@ -569,7 +675,7 @@ function buildSVG(outputPx) {
     const dims = pxW ? `width="${pxW}" height="${pxH}"` : 'width="100%" height="100%"';
 
     return {
-        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" ${dims} shape-rendering="${state.pattern === 'squares' && state.corners === 'sharp' ? 'crispEdges' : 'geometricPrecision'}">${body}</svg>`,
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" ${dims} shape-rendering="${options.pattern === 'squares' && options.corners === 'sharp' ? 'crispEdges' : 'geometricPrecision'}">${body}</svg>`,
         ratio: H / W
     };
 }
