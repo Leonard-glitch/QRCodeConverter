@@ -91,6 +91,9 @@ main{
                 font-size: 1rem;
                 cursor: pointer;
             }
+            #errorBox{
+                color: var(--errorColor);
+            }
 
         .historyDivMain{
             display: flex;
