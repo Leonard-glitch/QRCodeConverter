@@ -1,9 +1,11 @@
 
 const HISTORY_KEY = 'linqr_entries';
 const CURRENT_KEY = 'linqr_current';
-const MAX_HISTORY = 5;
+const MAX_HISTORY = 5; 
 
-document.addEventListener('DOMContentLoaded', () => {
+loadPage();
+
+function loadPage(){
     const input = document.getElementById('linkInputField');
     const generateBtn = document.getElementById('generateCodeButton');
     const errorBox = document.getElementById('errorBox');
@@ -77,9 +79,9 @@ document.addEventListener('DOMContentLoaded', () => {
             linkBtn.textContent = link;
             linkBtn.title = link;
             linkBtn.addEventListener('click', () => {
-                input.value = link;
+                const result=normalizeLink(link);
                 showError('');
-                input.focus();
+                generate(result);
             });
 
             const delBtn = document.createElement('button');
@@ -99,8 +101,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ---------- Generieren ----------
-    function generate() {
-        const result = normalizeLink(input.value);
+    function generate(result) {
+
         if (result.error) {
             showError(result.error);
             input.focus();
@@ -112,7 +114,10 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = './finalyzeqrcode.html?link=' + encodeURIComponent(result.link);
     }
 
-    generateBtn?.addEventListener('click', generate);
+    generateBtn?.addEventListener('click', function(){
+        const result=normalizeLink(input.value);
+        generate(result);
+    });
     input?.addEventListener('keydown', e => { if (e.key === 'Enter') generate(); });
     input?.addEventListener('input', () => showError(''));
 
@@ -129,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     showError('');
     renderHistory();
-});
+};
 
 
 // =====================================================

@@ -28,7 +28,7 @@ body{
 }
 
 /* Light Theme Variablen */
-[data-theme="light"] {
+[data-theme="light"]{
     --background-color-base: #F4F6F8;
     --background-color-secondary: #FFFFFF;
     --text-color-primary: #12161F;
@@ -89,7 +89,14 @@ a{
                 font-size: 1.2rem;
                 font-weight: 600;
             }
-    
+    #headerBurgerDeluxe{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        justify-content:flex-end;
+        gap:22%;
+    }
     .headerThreeLinksDiv{
         display: flex;
         flex-direction: row;

@@ -78,15 +78,40 @@ main{
             font-size: 0.875rem;
             font-weight: 500;
         }
+        #backtoNewLink:hover{
+            color: var(--text-color-primary);
+        }
         #currentLinkDiv{
             display: flex;
             flex-direction: row;
             justify-content: flex-start;
             color: var(--text-color-secondary);
             font-size: 0.7rem;
-
-            text-decoration: underline;
+        }
+        #currentLinkDiv{
+            white-space: nowrap;
             overflow-x: auto;
+            max-width: 100%;
+
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+        }
+
+        #currentLinkDiv::-webkit-scrollbar{
+            height: 4px; /* Sehr flach */
+        }
+
+        #currentLinkDiv::-webkit-scrollbar-track{
+            background: transparent;
+        }
+
+        #currentLinkDiv::-webkit-scrollbar-thumb{
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+
+        #currentLinkDiv::-webkit-scrollbar-thumb:hover{
+            background: rgba(255, 255, 255, 0.4);
         }
     #livePreviewContainerDiv{
         display: flex;
