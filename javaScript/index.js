@@ -1,10 +1,6 @@
-// =====================================================
-// linqr – Startseite (index.html)
-// Link-Eingabe, Validierung, Verlauf & Feature-Carousel
-// =====================================================
 
-const HISTORY_KEY = 'linqr_entries';   // gespeicherte Links
-const CURRENT_KEY = 'linqr_current';   // Link, der auf der nächsten Seite verarbeitet wird
+const HISTORY_KEY = 'linqr_entries';
+const CURRENT_KEY = 'linqr_current';
 const MAX_HISTORY = 5;
 
 document.addEventListener('DOMContentLoaded', () => {
