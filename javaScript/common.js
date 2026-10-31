@@ -147,3 +147,12 @@ const burgerDiv=document.getElementById("headerBurgerDeluxe");
     }
 
     initNavBurger();
+
+
+
+const burgerToggle = document.getElementById('open-close-BurgerBtn');
+const navLinks = document.getElementById('headerBurgerDeluxe');
+
+burgerToggle.addEventListener('click', () => {
+  navLinks.classList.toggle('active');
+});

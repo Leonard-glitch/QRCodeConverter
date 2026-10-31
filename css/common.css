@@ -448,3 +448,51 @@ a{
         flex-direction: column;
     }
 }
+
+#open-close-BurgerBtn{
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 5px;
+}
+#open-close-BurgerBtn span{
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: var(--text-color-primary);
+    transition: 0.3s;
+}
+
+@media(max-width: 600px){
+    .headerContainerMain{
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .headerLogoNameDiv{
+        width: 100%;
+        justify-content: space-between;
+        padding: 0 10px;
+    }
+    #open-close-BurgerBtn{
+        display: flex;
+    }
+
+    #headerBurgerDeluxe{
+        display: none;
+        flex-direction: column;
+        border-bottom: 2px solid var(--cyan-highlight);
+        border-radius: 0 0 10px 10px;
+    }
+    #headerBurgerDeluxe div{
+        border-top: 2px solid var(--text-color-secondary);
+        width: 100%;
+        padding: 10px 0;
+    }
+    
+    #headerBurgerDeluxe.active{
+        display: flex;
+    }
+}
