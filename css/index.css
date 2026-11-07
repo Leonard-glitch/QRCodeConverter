@@ -92,6 +92,7 @@ main{
                 cursor: pointer;
             }
             #errorBox{
+                display: none;
                 color: var(--errorColor);
                 width: 100%;
                 border: 1px solid var(--errorColor);

@@ -33,42 +33,55 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 4. Gespeicherte Einstellungen beim Laden anwenden
-    const savedTheme = localStorage.getItem('linqr_theme') || 'dark';
-    const savedHistory = localStorage.getItem('linqr_history') !== 'false';
-    const savedLang = localStorage.getItem('linqr_lang') || 'en';
+    function safeGetLocal(key, fallback) {
+        try {
+            return localStorage.getItem(key) ?? fallback;
+        } catch {
+            return fallback;
+        }
+    }
+
+    function safeSetLocal(key, value) {
+        try {
+            localStorage.setItem(key, value);
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
+    const savedTheme = safeGetLocal('linqr_theme', 'dark');
+    const savedHistory = safeGetLocal('linqr_history', 'true') !== 'false';
+    const savedLang = safeGetLocal('linqr_lang', 'en');
 
     // Theme sofort setzen
     document.documentElement.setAttribute('data-theme', savedTheme);
     updateActiveThemeButton(savedTheme);
 
-    if (historyToggle) {
-        historyToggle.checked = savedHistory;
-        historyToggle.addEventListener('change', (e) => {
-            localStorage.setItem('linqr_history', e.target.checked);
-        });
-    }
+        if (historyToggle) {
+            historyToggle.checked = savedHistory;
+            historyToggle.addEventListener('change', (e) => {
+                safeSetLocal('linqr_history', e.target.checked);
+            });
+        }
 
-    if (langSelect) {
-        langSelect.value = savedLang;
-        langSelect.addEventListener('change', (e) => {
-            localStorage.setItem('linqr_lang', e.target.value);
-        });
-    }
+        if (langSelect) {
+            langSelect.value = savedLang;
+            langSelect.addEventListener('change', (e) => {
+                safeSetLocal('linqr_lang', e.target.value);
+            });
+        }
 
     // 5. Theme wechseln & speichern (mit e.currentTarget statt e.target)
     themeButtons.forEach(btn => {
         btn.addEventListener('click', (e) => {
             const selectedTheme = e.currentTarget.getAttribute('data-theme');
-            
-            // Auf html-Tag setzen
+
             document.documentElement.setAttribute('data-theme', selectedTheme);
-            
-            // In localStorage sichern
-            localStorage.setItem('linqr_theme', selectedTheme);
-            
-            // UI aktualisieren
+
             updateActiveThemeButton(selectedTheme);
+
+            safeSetLocal('linqr_theme', selectedTheme);
         });
     });
 

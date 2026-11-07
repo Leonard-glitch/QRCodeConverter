@@ -68,6 +68,12 @@ let qrMatrix = null; // { n, isDark(r,c) }
 // =====================================================
 document.addEventListener('DOMContentLoaded', async () => {
     state.link = getLinkFromPage();
+
+    if (state.link === null) {
+        setPreviewMessage('Your browser blocks session storage. Please enable it and try again.');
+        return;
+    }
+
     if (!state.link) {
         window.location.href = './index.html';
         return;
@@ -101,10 +107,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function getLinkFromPage() {
-    const param = new URLSearchParams(window.location.search).get('link');
-    const link = (param || localStorage.getItem('linqr_current') || '').trim();
-    if (link) localStorage.setItem('linqr_current', link);
-    return link;
+    try{
+        return (sessionStorage.getItem('linqr_current') || '').trim();
+    }catch {
+        return null;
+    };
 }
 
 function loadScript(src) {
@@ -408,10 +415,27 @@ function bindUpload() {
     fileInput.addEventListener('change', async () => {
         const file = fileInput.files[0];
         fileInput.value = '';
+
         if (!file) return;
-        if (!file.type.startsWith('image/')) return showInfo('Please choose an image file.', 'error');
-        if (file.size > 2 * 1024 * 1024) return showInfo('The image is too large (max. 2 MB).', 'error');
-        state.uploadedImage = await blobToDataURL(file);
+
+        if (!file.type.startsWith('image/')) {
+            return showInfo('Please choose an image file.', 'error');
+        }
+
+        if (file.size > 2 * 1024 * 1024) {
+            return showInfo('The image is too large (max. 2 MB).', 'error');
+        }
+
+        let imageData;
+
+        try {
+            imageData = await blobToDataURL(file);
+        } catch {
+            showInfo('The image could not be loaded. Please try again.', 'error');
+            return;
+        }
+
+        state.uploadedImage = imageData;
         renderUploadPreview();
         selectUpload();
     });

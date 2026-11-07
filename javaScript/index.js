@@ -15,11 +15,39 @@ function loadPage(){
     const historyToggle = document.getElementById('historyToggle');
 
     // ---------- Hilfsfunktionen ----------
-    const historyEnabled = () => localStorage.getItem('linqr_history') !== 'false';
+
+    function safeGetLocal(key) {
+        try {
+            return localStorage.getItem(key);
+        } catch {
+            return null;
+        }
+    }
+
+    function safeSetLocal(key, value) {
+        try {
+            localStorage.setItem(key, value);
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
+    function safeRemoveLocal(key) {
+        try {
+            localStorage.removeItem(key);
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
+
+    const historyEnabled = () => safeGetLocal('linqr_history') !== 'false';
 
     function getHistory() {
         try {
-            const list = JSON.parse(localStorage.getItem(HISTORY_KEY));
+            const list = JSON.parse(safeGetLocal(HISTORY_KEY) || '[]');
             return Array.isArray(list) ? list : [];
         } catch {
             return [];
@@ -27,7 +55,7 @@ function loadPage(){
     }
 
     function setHistory(list) {
-        localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0, MAX_HISTORY)));
+        safeSetLocal(HISTORY_KEY, JSON.stringify(list.slice(0, MAX_HISTORY)));
     }
 
     function addToHistory(link) {
@@ -110,8 +138,14 @@ function loadPage(){
         }
         showError('');
         addToHistory(result.link);
-        localStorage.setItem(CURRENT_KEY, result.link);
-        window.location.href = './finalyzeqrcode.html?link=' + encodeURIComponent(result.link);
+        try {
+            sessionStorage.setItem(CURRENT_KEY, result.link);
+        } catch {
+            showError('Your browser blocks session storage. Please enable it and try again.');
+            return;
+        }
+
+        window.location.href = './finalyzeqrcode.html';
     }
 
     generateBtn.addEventListener('click', function(){
@@ -122,13 +156,15 @@ function loadPage(){
     input?.addEventListener('input', () => showError(''));
 
     deleteHistoryBtn?.addEventListener('click', () => {
-        localStorage.removeItem(HISTORY_KEY);
+        safeRemoveLocal(HISTORY_KEY);
         renderHistory();
     });
 
     // Wird der Verlauf in den Settings deaktiviert -> löschen & ausblenden
     historyToggle?.addEventListener('change', e => {
-        if (!e.target.checked) localStorage.removeItem(HISTORY_KEY);
+        if (!e.target.checked) {
+            safeRemoveLocal(HISTORY_KEY);
+        }
         renderHistory();
     });
 
