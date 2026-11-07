@@ -114,11 +114,11 @@ function loadPage(){
         window.location.href = './finalyzeqrcode.html?link=' + encodeURIComponent(result.link);
     }
 
-    generateBtn?.addEventListener('click', function(){
+    generateBtn.addEventListener('click', function(){
         const result=normalizeLink(input.value);
         generate(result);
     });
-    input?.addEventListener('keydown', e => { if (e.key === 'Enter') generate(); });
+    input?.addEventListener('keydown', e => { if (e.key === 'Enter') generateBtn?.click(); });
     input?.addEventListener('input', () => showError(''));
 
     deleteHistoryBtn?.addEventListener('click', () => {
@@ -139,64 +139,116 @@ function loadPage(){
 
 // =====================================================
 // Feature-Carousel (unendlicher Auto-Scroll)
+// Pfeil-Klick / Antippen: Karte komplett zeigen, kurz warten, dann weiterlaufen
 // =====================================================
 document.addEventListener('DOMContentLoaded', () => {
     const track = document.getElementById('carouselTrack');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
-
     if (!track) return;
 
-    // Karten klonen für nahtlosen Loop
-    Array.from(track.children).forEach(card => {
+    const originals = Array.from(track.children);
+    // Karten klonen für nahtlosen Loop (Klone für Screenreader/Tab unsichtbar)
+    originals.forEach(card => {
         const clone = card.cloneNode(true);
         clone.setAttribute('aria-hidden', 'true');
+        clone.setAttribute('inert', '');
         track.appendChild(clone);
     });
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const scrollSpeed = 0.8;
-    let isPaused = reducedMotion;
-    let position = 0; // eigene Kommazahl, da scrollLeft gerundet wird
+    const SPEED = 40;          // Pixel pro Sekunde – unabhängig von 60/120/144 Hz
+    const PAUSE_MS = 5000;     // Wartezeit nach Pfeil-Klick / Antippen
+    let hover = false, touch = false, holdUntil = 0;
+    let position = 0;
+    let lastTime = null;
 
-    function autoScroll() {
-        if (!isPaused) {
-            position += scrollSpeed;
-            if (position >= track.scrollWidth / 2) position = 0;
+    // Breite einer Hälfte (Originale + Gap) – exakt, damit der Loop nicht springt
+    const loopWidth = () => {
+        const cards = track.children;
+        return cards[cards.length / 2].offsetLeft - cards[0].offsetLeft;
+    };
+    const stepWidth = () => {
+        const cards = track.children;
+        return cards[1].offsetLeft - cards[0].offsetLeft;
+    };
+
+    const isHolding = () => performance.now() < holdUntil;
+    function hold(ms = PAUSE_MS) {
+        holdUntil = Math.max(holdUntil, performance.now() + ms);
+    }
+
+    function step(time) {
+        const paused = reducedMotion || hover || touch || isHolding() || document.hidden;
+        track.classList.toggle('is-paused', paused && !reducedMotion);
+        if (lastTime !== null && !paused) {
+            const dt = Math.min(time - lastTime, 50) / 1000;
+            position += SPEED * dt;
+            const w = loopWidth();
+            if (position >= w) position -= w;
             track.scrollLeft = position;
-        } else {
+        } else if (paused) {
             position = track.scrollLeft;
         }
-        requestAnimationFrame(autoScroll);
+        if (!isHolding()) clearActive();
+        lastTime = time;
+        requestAnimationFrame(step);
     }
 
-    track.addEventListener('mouseenter', () => isPaused = true);
-    track.addEventListener('mouseleave', () => isPaused = reducedMotion);
-    track.addEventListener('touchstart', () => isPaused = true, { passive: true });
-    track.addEventListener('touchend', () => isPaused = reducedMotion, { passive: true });
+    // Desktop: Hover pausiert, beim Verlassen kurz nachlaufen lassen
+    track.addEventListener('mouseenter', () => hover = true);
+    track.addEventListener('mouseleave', () => { hover = false; hold(800); });
+    track.addEventListener('focusin', () => hover = true);
+    track.addEventListener('focusout', () => hover = false);
 
-    function getScrollAmount() {
-        const firstCard = track.querySelector('.carousel-card');
-        const gap = parseInt(window.getComputedStyle(track).gap) || 20;
-        return firstCard.offsetWidth + gap;
+    // Handy: Wischen pausiert, danach Wartezeit
+    track.addEventListener('touchstart', () => touch = true, { passive: true });
+    track.addEventListener('touchend', () => { touch = false; hold(); }, { passive: true });
+
+    // Antippen einer Karte: hervorheben und komplett ins Bild holen
+    function clearActive() {
+        track.querySelectorAll('.carousel-card.is-active').forEach(c => c.classList.remove('is-active'));
     }
+    track.addEventListener('click', e => {
+        const card = e.target.closest('.carousel-card');
+        if (!card) return;
+        clearActive();
+        card.classList.add('is-active');
+        const left = card.offsetLeft - track.children[0].offsetLeft;
+        const right = left + card.offsetWidth;
+        // Nur scrollen, wenn die Karte angeschnitten ist
+        if (left < track.scrollLeft || right > track.scrollLeft + track.clientWidth) {
+            const target = Math.min(left, Math.max(track.scrollLeft, right - track.clientWidth));
+            track.scrollTo({ left: target, behavior: reducedMotion ? 'auto' : 'smooth' });
+        }
+        hold();
+    });
 
-    // Während der Smooth-Scroll-Animation Auto-Scroll kurz anhalten
+    // Pfeile: auf die nächste/vorherige Karte EXAKT einrasten, dann warten
     function manualScroll(dir) {
-        const wasPaused = isPaused;
-        isPaused = true;
-        const half = track.scrollWidth / 2;
-        if (dir > 0 && track.scrollLeft >= half) track.scrollLeft -= half;
-        if (dir < 0 && track.scrollLeft <= 0) track.scrollLeft += half;
-        track.scrollBy({ left: dir * getScrollAmount(), behavior: 'smooth' });
-        setTimeout(() => {
-            position = track.scrollLeft;
-            isPaused = wasPaused;
-        }, 500);
+        const w = loopWidth();
+        const s = stepWidth();
+        let cur = track.scrollLeft;
+        // Unsichtbar in die "sichere" Hälfte springen (Klone sind identisch)
+        if (dir > 0 && cur + s > w) { cur -= w; track.scrollLeft = cur; }
+        if (dir < 0 && cur - s < 0) { cur += w; track.scrollLeft = cur; }
+
+        // Ist die erste Karte nur angeschnitten, zählt das Einrasten darauf schon als Schritt zurück
+        const idx = dir > 0 ? Math.floor(cur / s + 0.05) + 1 : Math.ceil(cur / s - 0.05) - 1;
+        clearActive();
+        track.scrollTo({ left: idx * s, behavior: reducedMotion ? 'auto' : 'smooth' });
+        hold();
     }
 
     nextBtn?.addEventListener('click', () => manualScroll(1));
     prevBtn?.addEventListener('click', () => manualScroll(-1));
 
-    autoScroll();
+    // Bei Größenänderung Position im gültigen Bereich halten
+    window.addEventListener('resize', () => {
+        const w = loopWidth();
+        position = ((track.scrollLeft % w) + w) % w;
+        track.scrollLeft = position;
+    });
+
+    requestAnimationFrame(step);
 });

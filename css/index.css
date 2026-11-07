@@ -59,7 +59,7 @@ main{
                 box-sizing: border-box;
                 
                 padding: 0.7rem;
-                padding-right: 160px;
+                padding-right: 200px;
                 
                 border: 1px solid var(--border-color-primary);
                 border-radius: 10px;
@@ -93,6 +93,11 @@ main{
             }
             #errorBox{
                 color: var(--errorColor);
+                width: 100%;
+                border: 1px solid var(--errorColor);
+                border-radius: 8px;
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
             }
 
         .historyDivMain{
@@ -266,172 +271,198 @@ main{
         margin-top: 1.3rem;
         margin: 1.3rem 0 0 6px;
     }
+    #linkInputField{
+        padding-right: 0.7rem;
+    }
 }
 
 /* Carousel Styles*/
 
 /* =========================================================
-           1. ANPASSBARE CSS-VARIABLEN (Hier Farben & Abstände ändern)
-       ========================================================= */
-    :root {
-        /* Farben */
-        --bg-color: #0d0f12;       /* Hintergrund der Seite */
-        --card-bg: #161920;        /* Hintergrund der Karten */
-        --card-border: #252a36;    /* Rahmen der Karten */
-        --accent-color: #34d399;   /* Neon-Grün / Akzentfarbe */
-        --text-main: #ffffff;      /* Haupttext / Überschriften */
-        --text-muted: #9ca3af;     /* Nebentext / Beschreibungen */
+   Feature-Carousel – nutzt die Theme-Variablen aus common.css,
+   damit Dark- UND Light-Mode automatisch funktionieren.
+   ========================================================= */
+#featuresSection {
+    --carousel-gap: 20px;
+    --card-radius: 16px;
+    --card-padding: clamp(18px, 2.5vw, 30px);
+    --btn-size: 44px;
+    --visible-cards: 1;
+    --card-basis: calc((100% - (var(--visible-cards) - 1) * var(--carousel-gap)) / var(--visible-cards));
 
-        /* Abstände & Radien */
-        --gap: 20px;               /* Abstand zwischen den Karten */
-        --card-radius: 16px;       /* Abrundung der Karten */
-        --card-padding: 32px;      /* Innenabstand der Karten */
-        --btn-size: 48px;          /* Größe der Pfeil-Buttons */
+    width: 100%;
+    padding: 2rem clamp(12px, 4vw, 48px);
+    box-sizing: border-box;
+    overflow: hidden; /* verhindert horizontales Scrollen der ganzen Seite */
+}
 
-        /* Standardwert für Mobilgeräte */
-        --visible-cards: 1;
+/* Tablet: 2 Karten, Desktop: 3 Karten */
+@media (min-width: 640px)  { #featuresSection { --visible-cards: 2; } }
+@media (min-width: 1024px) { #featuresSection { --visible-cards: 3; } }
+
+.carousel-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    /* Platz für die Pfeile, damit sie nie über den Rand ragen */
+    padding: 0 calc(var(--btn-size) + 12px);
+    box-sizing: border-box;
+}
+
+.carousel-track {
+    display: flex;
+    align-items: stretch; /* alle Karten gleich hoch */
+    gap: var(--carousel-gap);
+    overflow-x: auto;
+    padding: 12px 0;      /* Platz für Hover-Anhebung, sonst abgeschnitten */
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    /* Weiche Kanten nur während das Karussell läuft */
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+            mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+    transition: -webkit-mask-image .3s ease, mask-image .3s ease;
+}
+.carousel-track::-webkit-scrollbar { display: none; }
+/* Pausiert (nach Pfeil-Klick / Antippen): Karten komplett sichtbar, keine Ausblendung */
+.carousel-track.is-paused {
+    -webkit-mask-image: none;
+            mask-image: none;
+}
+
+/* Snap nur bei Reduced-Motion – sonst kämpft Snap gegen den Auto-Scroll */
+@media (prefers-reduced-motion: reduce) {
+    .carousel-track { scroll-snap-type: x mandatory; }
+    .carousel-card  { scroll-snap-align: start; }
+}
+
+.carousel-card {
+    flex: 0 0 var(--card-basis);
+    box-sizing: border-box;
+    min-width: 0;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    cursor: default;
+
+    background-color: var(--background-color-secondary);
+    border: 1px solid var(--border-color-secondary);
+    border-radius: var(--card-radius);
+    padding: var(--card-padding);
+    color: var(--text-color-primary);
+    transition: border-color .25s ease, transform .25s ease, box-shadow .25s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.carousel-card:hover,
+.carousel-card.is-active,
+.carousel-card:focus-visible {
+    border-color: var(--cyan-highlight);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px -12px var(--cyan-highlight);
+    outline: none;
+}
+
+.card-tag {
+    color: var(--cyan-highlight);
+    font-size: .78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin-bottom: 12px;
+}
+[data-theme="light"] .card-tag { color: #00927F; } /* besserer Kontrast auf Weiß */
+
+.card-title {
+    margin: 0 0 12px;
+    font-size: clamp(1.1rem, 1.6vw + .5rem, 1.4rem);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--text-color-primary);
+    overflow-wrap: anywhere;
+}
+
+.card-text {
+    margin: 0;
+    color: var(--text-color-secondary);
+    font-size: clamp(.88rem, .4vw + .78rem, .95rem);
+    line-height: 1.6;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: var(--btn-size);
+    height: var(--btn-size);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+    padding: 0;
+
+    background-color: var(--background-color-secondary);
+    border: 1px solid var(--border-color-primary);
+    color: var(--text-color-primary);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .35);
+    transition: border-color .2s ease, color .2s ease, background-color .2s ease, transform .15s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+[data-theme="light"] .carousel-btn { box-shadow: 0 4px 14px rgba(18, 22, 31, .12); }
+
+.carousel-btn:hover,
+.carousel-btn:focus-visible {
+    border-color: var(--cyan-highlight);
+    color: var(--cyan-highlight);
+    outline: none;
+}
+.carousel-btn:active { transform: translateY(-50%) scale(.94); }
+.btn-prev { left: 0; }
+.btn-next { right: 0; }
+
+/* Handy: Karten fast volle Breite mit kleiner Vorschau der nächsten,
+   Pfeile mittig UNTER dem Karussell (mehr Platz für den Text, gut mit dem Daumen erreichbar) */
+@media (max-width: 639px) {
+    #featuresSection {
+        --carousel-gap: 14px;
+        --btn-size: 42px;
+        --card-basis: 86%;
+        padding-inline: 12px;
     }
-
-    /* Tablet Breakpoint (ab 640px): 2 Cards gleichzeitig */
-    @media (min-width: 640px) {
-        :root {
-            --visible-cards: 2;
-        }
+    .carousel-wrapper {
+        padding: 0 0 calc(var(--btn-size) + 16px);
     }
-
-    /* Desktop Breakpoint (ab 1024px): 3 Cards gleichzeitig */
-    @media (min-width: 1024px) {
-        :root {
-            --visible-cards: 3;
-        }
+    .carousel-btn {
+        top: auto;
+        bottom: 0;
+        transform: none;
     }
+    .carousel-btn:active { transform: scale(.94); }
+    .btn-prev { left: calc(50% - var(--btn-size) - 8px); }
+    .btn-next { right: calc(50% - var(--btn-size) - 8px); }
+    .carousel-card { min-height: 200px; }
+}
 
+@media (max-width: 380px) {
+    #featuresSection { --card-basis: 90%; --carousel-gap: 10px; padding-inline: 8px; }
+    .carousel-card { min-height: 0; }
+}
 
-       /* body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        } */
+/* =========================================================
+   Carousel nutzt (fast) die volle Bildschirmbreite –
+   bricht aus dem body-Padding aus, ohne das Layout zu ändern.
+   ========================================================= */
+html { overflow-x: clip; } /* 100vw enthält die Scrollbar – verhindert seitliches Scrollen */
 
-        /* Haupt-Container */
-        .carousel-wrapper {
-            position: relative;
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+#featuresSection {
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
+    padding-inline: clamp(12px, 3vw, 56px);
+}
+#featuresSection .carousel-wrapper { max-width: 1800px; }
 
-        /* Der Scroll-Bereich */
-        .carousel-track {
-            display: flex;
-            gap: var(--gap);
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            scroll-behavior: smooth;
-            padding: 8px 0;
-            
-            /* Scrollbar ausblenden */
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE/Edge */
-        }
-
-        .carousel-track::-webkit-scrollbar {
-            display: none; /* Chrome/Safari */
-        }
-
-        /* =========================================================
-           3. KARTEN-DESIGN
-           ========================================================= */
-        .carousel-card {
-            /* Exakte Berechnung der Breite basierend auf sichtbaren Karten + Gaps */
-            flex: 0 0 calc((100% - (var(--visible-cards) - 1) * var(--gap)) / var(--visible-cards));
-            scroll-snap-align: start;
-            
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: var(--card-radius);
-            padding: var(--card-padding);
-            
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            min-height: 240px;
-            
-            transition: border-color 0.25s ease, transform 0.25s ease;
-        }
-
-        .carousel-card:hover {
-            border-color: var(--accent-color);
-            transform: translateY(-3px);
-        }
-
-        .card-tag {
-            color: var(--accent-color);
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 12px;
-        }
-
-        .card-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            line-height: 1.3;
-        }
-
-        .card-text {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        /* =========================================================
-           4. NAVIGATION BUTTONS (LINKS & RECHTS ABSOLUT)
-           ========================================================= */
-        .carousel-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: var(--btn-size);
-            height: var(--btn-size);
-            border-radius: 50%;
-            
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            color: var(--text-main);
-            
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 10;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-            transition: all 0.2s ease;
-        }
-
-        .carousel-btn:hover {
-            background-color: var(--card-border);
-            border-color: var(--accent-color);
-            color: var(--accent-color);
-        }
-
-        /* Positionierung ganz links & rechts leicht herausragend */
-        .btn-prev {
-            left: calc(-1 * (var(--btn-size) / 2));
-        }
-
-        .btn-next {
-            right: calc(-1 * (var(--btn-size) / 2));
-        }
-
-        /* Auf Smartphones Pfeile leicht nach innen holen damit sie nicht über den Bildschirm rand stehen */
-        @media (max-width: 640px) {
-            .btn-prev { left: 8px; }
-            .btn-next { right: 8px; }
-        }
+/* Große Monitore: 4 Karten nebeneinander, damit sie nicht zu breit werden */
+@media (min-width: 1500px) { #featuresSection { --visible-cards: 4; } }
