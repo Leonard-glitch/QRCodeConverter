@@ -235,7 +235,7 @@ main{
         padding: 10px 10px;
     }
     #topSection{
-        flex-direction: column-reverse;
+        flex-direction: column;
         margin-top: 1rem;
     }
     .sloganAndInputDiv{
@@ -245,19 +245,12 @@ main{
 }
 
 @media (max-width: 900px) {
-    body{
-        padding: 10px 0;
-    }
     .sloganAndInputDiv{
         width: 85%;
     }
-    
 }
 
 @media (max-width: 700px) {
-    body{
-        padding: 10px 0;
-    }
     .sloganAndInputDiv{
         width: 98%;
     }
